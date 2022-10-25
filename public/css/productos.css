@@ -1,0 +1,19 @@
+#productos{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 15px;
+}
+.card{
+    width: 18rem;
+}
+
+.row{
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.btnSubmit{
+    margin-top: 10px;
+}
