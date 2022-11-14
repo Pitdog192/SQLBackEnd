@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 
 const Router = require('router') ;
 const routerProductos = Router();
-
+console.log(productosDao)
 const getPos = (id) =>  parseInt(id)
 
 routerProductos.get('/:id?', async ( req, res )=>{ //devuelve un producto según su id o todos los productos
@@ -19,7 +19,8 @@ routerProductos.get('/:id?', async ( req, res )=>{ //devuelve un producto según
 })
 
 routerProductos.post('/', sesionMiddleware, async ( req, res ) => { //recibe y agrega un producto y lo devuelve con el id asignado
-    res.json(await productosDao.saveProducto(req.body))
+    console.log(typeof productosDao.save())
+    res.json(await productosDao.save(req.body))
 })
 
 routerProductos.put('/:id',sesionMiddleware, async ( req, res ) => { //recibe y actualiza un producto segun su id

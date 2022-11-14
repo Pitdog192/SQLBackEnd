@@ -1,2 +1,9 @@
+import Container from "../../Contenedores/ContenedorFirestore.js";
 
-//aca va a ir toda la lógica del contenedor de carritos basado en firebase
+class CarritosDaoFirebase extends Container{
+    constructor(){
+        super('carritos')
+    }
+}
+
+export default CarritosDaoFirebase

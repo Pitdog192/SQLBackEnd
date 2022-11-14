@@ -1,37 +1,37 @@
-import model from 'mongoose';
+import mongoose from 'mongoose';
 
 class Container {
 	constructor(collection, schema) {
-		this.model = model(collection, schema);
+		this.collection = mongoose.model(collection, schema);
 	}
 	
-	save(obj) {
+	async save(obj) {
 		try {
-			return this.model.create(obj);
+			return this.collection.create(obj);
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
-	getById(id) {
+	async getById(id) {
 		try {
-			return this.model.findById(id);
+			return this.collection.findById(id);
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
-	getAll() {
+	async getAll() {
 		try {
-			return this.model.find();
+			return this.collection.find();
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
-	deleteById(id) {
+	async deleteById(id) {
 		try {
-			return this.model.findByIdAndDelete(id);
+			return this.collection.findByIdAndDelete(id);
 		} catch (err) {
 			console.log(err);
 		}
