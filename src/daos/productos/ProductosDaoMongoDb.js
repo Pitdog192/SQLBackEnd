@@ -3,16 +3,15 @@ import Container from '../../Contenedores/ContenedorMongoDb.js';
 
 class ProductosDaoMongoDb extends Container {
 	constructor() {
-		super('productos', new mongoose.Schema(
+		super(new mongoose.Schema(
 			{
 				name: { type: String, require: true },
 				description: { type: String, require: true },
-				code: { type: Number, require: true },
+				code: { type: Number, require: true, unique: true },
 				pic: { type: String, require: true },
 				price: { type: Number, require: true },
 				stock: { type: Number, require: true }
-			},
-			{ timestamps: true }
+			}
 		));
 	}
 	updateProduct(id, data) {

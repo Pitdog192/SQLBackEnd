@@ -14,6 +14,10 @@ app.use(express.urlencoded({ extended:true }));
 app.use(express.static('public'));
 app.use('/productos', routerProductos); //RUTA DE PRODUCTOS
 app.use('/carrito', routerCarrito); // RUTA DE CARRITO
+app.use('*', (req, res) => {
+	let path = req.params;
+	res.send({ Error_ruta: `La ruta: '${path[0]}' no está implementada` });
+});
 
 //CONECCION A MONGODBATLAS
 try {

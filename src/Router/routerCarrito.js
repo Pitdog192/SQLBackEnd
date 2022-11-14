@@ -3,7 +3,7 @@ import Contenedor from '../Contenedores/Contenedor.js';
 import sesionMiddleware from '../Middlewares/sesionMiddle.js';
 //NECESARIO PARA USAR REQUIRE EN ECS6
 import { createRequire } from 'module';
-import carritosDao from '../daos/index.js'
+import {carritosDao} from '../daos/index.js'
 const require = createRequire(import.meta.url);
 
 const Router = require('router') ;
