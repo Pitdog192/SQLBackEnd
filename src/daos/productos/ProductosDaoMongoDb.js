@@ -3,7 +3,7 @@ import Container from '../../Contenedores/ContenedorMongoDb.js';
 
 class ProductosDaoMongoDb extends Container {
 	constructor() {
-		super(new mongoose.Schema(
+		super('productos',new mongoose.Schema(
 			{
 				name: { type: String, require: true },
 				description: { type: String, require: true },

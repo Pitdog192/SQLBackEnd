@@ -1,13 +1,14 @@
 import { model } from 'mongoose';
 
 class Container {
-	constructor(schema) {
-		this.model = model('productos', schema);
+	constructor(collection, schema) {
+		this.model = model(collection, schema);
 	}
 	//Save an object
 	async save(obj) {
 		try {
-			return this.model.create(obj);
+			let creacion = this.model.create(obj);
+			return creacion
 		} catch (err) {
 			console.log(err);
 		}

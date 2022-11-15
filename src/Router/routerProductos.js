@@ -9,8 +9,9 @@ const Router = require('router') ;
 const routerProductos = Router();
 
 routerProductos.get('/:id?', async ( req, res )=>{ //devuelve un producto según su id o todos los productos
-    if(req.params.id)
-    res.json(await productosDao.getById(req.params.id))
+    if(req.params.id){
+        res.json(await productosDao.getById(req.params.id))
+    }
     else{
         res.json(await productosDao.getAll())
     }
