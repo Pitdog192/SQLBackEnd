@@ -20,8 +20,8 @@ class Container {
 	//Get an object by ID
 	async getById(id) {
 		try {
-			const producto = await this.collection.doc(`/products/${id}`).get();
-			return producto;
+			const producto = await this.collection.doc(id).get();
+			return producto.data();
 		} catch (err) {
 			throw new Error(`Error al obtener por id: ${err}`);
 		}
@@ -29,27 +29,38 @@ class Container {
 	//Get all objects
 	async getAll() {
 		try {
-			const productos = await this.collection.get();
-			return productos;
+			let productosSnapshot =  await this.collection.get()
+			let productos = productosSnapshot.docs;
+			const listaProductos = productos.map(prod => ({
+				id: prod.id,
+				name: prod.data().name,
+				description: prod.data().description,
+				pic: prod.data().pic,
+				price: prod.data().price,
+				stock: prod.data().stock
+			}))
+			return listaProductos;
 		} catch (err) {
 			throw new Error(`Error al obtener todos: ${err}`);
 		}
 	}
 
-	async acualizar(nuevo){
+	async updateProduct(id,data){
 		try{
-			const actualizado = await this.collection.doc(nuevo.id).set(nuevo)
-			return actualizado
+			let doc = this.collection.doc(id);
+			let productoActualizado = await doc.update(data)
+			return productoActualizado;
 		}
-		catch{
+		catch(error){
 			throw new Error(`Error al actualizar: ${error}`)
 		}
 	}
 	//Delete one object
 	async deleteById(id) {
 		try {
-			const borrado = await this.collection.doc(id).delete();
-			return borrado;
+			const doc = this.collection.doc(id)
+			let productoEliminado = await doc.delete()
+			return productoEliminado;
 		} catch (err) {
 			throw new Error(`Error al borrar: ${err}`);
 		}

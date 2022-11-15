@@ -23,10 +23,6 @@ routerCarrito.get('/:id/productos', async (req, res) => { //me permite listar lo
 })
 
 routerCarrito.post('/:id/productos', async (req, res) => { //para incorporar productos al carrito por su id de producto
-    let producto = await productosDao.getById(req.body.id);
-    console.log(producto)
-    // let carrito = await carritosDao.insertProduct(req.params.id);
-    // console.log(carrito)
     res.json({resp: "aun sin realizar" })
 })
 
