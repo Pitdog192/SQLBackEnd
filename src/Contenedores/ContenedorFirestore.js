@@ -37,7 +37,8 @@ class Container {
 				description: prod.data().description,
 				pic: prod.data().pic,
 				price: prod.data().price,
-				stock: prod.data().stock
+				stock: prod.data().stock,
+				code: prod.data().code
 			}))
 			return listaProductos;
 		} catch (err) {

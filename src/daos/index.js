@@ -5,7 +5,6 @@ switch (config.type) {
     case 'mongodb':
         const { default: ProductosDaoMongoDb} = await import ('./productos/ProductosDaoMongoDb.js');
         const { default: CarritosDaoMongoDb} = await import ('./carritos/CarritosDaoMongoDb.js');
-        console.log("Clase productos",ProductosDaoMongoDb);
         productosDao = new ProductosDaoMongoDb();
         carritosDao = new CarritosDaoMongoDb();
         break;
