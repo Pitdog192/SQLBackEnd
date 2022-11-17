@@ -1,5 +1,6 @@
 import Contenedor from '../Contenedores/Contenedor.js';
 import sesionMiddleware from '../Middlewares/sesionMiddle.js';
+import {insertarProductos} from '../scripts/fakerProductos.js';
 //NECESARIO PARA USAR REQUIRE EN ECS6
 import { createRequire } from 'module';
 import {productosDao} from '../daos/index.js';
@@ -29,6 +30,12 @@ routerProductos.put('/:id',sesionMiddleware, async ( req, res ) => { //recibe y 
 routerProductos.delete('/:id',sesionMiddleware, async ( req, res ) => { // elimina un producto segun su id
     res.json(await productosDao.deleteById(req.params.id))
 })
+
+//RUTA PARA NORMALIZACIÓN 
+routerProductos.get('/api/productos-test', (req, res) => {
+    res.json(insertarProductos())
+})
+
 
 export default routerProductos;
 

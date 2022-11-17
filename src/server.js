@@ -14,10 +14,6 @@ app.use(express.urlencoded({ extended:true }));
 app.use(express.static('public'));
 app.use('/productos', routerProductos); //RUTA DE PRODUCTOS
 app.use('/carrito', routerCarrito); // RUTA DE CARRITO
-app.use('*', (req, res) => {
-	let path = req.params;
-	res.send({ Error_ruta: `La ruta: '${path[0]}' no está implementada` });
-});
 
 //CONECCION A MONGODBATLAS
 try {
@@ -26,5 +22,10 @@ try {
     console.log(error)
 } 
 
+//RESPUESTA PARA RUTAS NO IMPLEMENTADAS
+app.use('*', (req, res) => {
+    let path = req.params;
+    res.send({ Error_ruta: `La ruta: '${path[0]}' no está implementada` });
+});
 const server = httpServer.listen(config.port, () => console.log(`Server escuchando, http://localhost:${config.port}`));
 server.on('error', (error) => console.log(`Error: ${error}`));
