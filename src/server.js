@@ -4,11 +4,14 @@ import routerCarrito from './Router/routerCarrito.js';
 import { createRequire } from 'module';
 import config from './config.js';
 import mongoose from 'mongoose';
+import socketIo from './scripts/socket.js';
 
 const require = createRequire(import.meta.url);
+const { Server: IOServer} = require('socket.io');
 const { Server: HttpServer}  = require('http');
 const app = express();
 const httpServer = new HttpServer(app);
+const io = new IOServer(httpServer);
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 app.use(express.static('public'));
@@ -21,6 +24,10 @@ try {
 } catch (error) {
     console.log(error)
 } 
+
+// SOCKETS-------------------------------
+socketIo(io);
+// FIN DE SOCKETS-------------------------
 
 //RESPUESTA PARA RUTAS NO IMPLEMENTADAS
 app.use('*', (req, res) => {

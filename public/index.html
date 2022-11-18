@@ -62,18 +62,26 @@
             <h1> Mensajes </h1>
             <form action="#" method="POST" class="formulario" onsubmit="return enviarMensaje()">
                 <div class="row">
-                    <input id="email" class="col-3" type="Email" placeholder="Email" class="form-control">
-                    <input id="mensaje" class="col-5" type="text" placeholder="Mensaje" class="form-control">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="email">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="name">
+                        <input type="text" name="lastname" id="lastName" class="form-control" placeholder="lastname">
+                        <input type="number" name="age" id="age" class="form-control" placeholder="age">
+                        <input type="text" name="alias" id="alias" class="form-control" placeholder="alias">
+                        <input type="text" name="avatar" id="avatar"class="form-control" placeholder="avatar">
+                        <textarea cols="10" rows="5" type="text" name="text" id="text" class="form-control" placeholder="text"></textarea>
                 </div>
                 <button class="btn btn-primary">Enviar</button>
             </form>
             <table class="table table-dark container">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Fecha</th>
+                        <th scope="col">Avatar</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Mensaje</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Edad</th>
+                        <th scope="col">Alias</th>
+                        <th scope="col">Texto</th>
                     </tr>
                 </thead>
                 <tbody id="mensajes">
@@ -84,11 +92,11 @@
         <!--SCRIPT BOOTSTRAP-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         <!--NORMALIZR-->
+        <script> var exports = {}; </script><!--SOLUCIONA UN ERROR EN LA CONSOLA, LIBRERIA NORMALIZR-->
         <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.2/dist/normalizr.min.js"></script>
         <!--SOCKET.IO-->
         <script src="/socket.io/socket.io.js"></script>
         <!--MAIN JS-->
         <script src="./main.js"></script>
-        <script src="./js/normalizr.js"></script>
     </body>
 </html>

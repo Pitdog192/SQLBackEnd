@@ -1,4 +1,5 @@
 import faker from 'faker';
+faker.locale = 'es';
 
 const generarProducto = () => {
     return({
@@ -8,8 +9,8 @@ const generarProducto = () => {
             description: faker.commerce.productDescription(),
             code: faker.datatype.number({ max: 999 }),
             pic: faker.image.imageUrl(),
-            price: faker.commerce.price(10, 2000,2),
-            stock: faker.datatype.number({ max: 9999 }) 
+            price: faker.commerce.price(10, 2000, 0),
+            stock: faker.datatype.number({ max: 999 }) 
         }
     })
 }

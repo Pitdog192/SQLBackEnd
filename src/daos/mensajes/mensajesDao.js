@@ -4,9 +4,8 @@ import mongoose from 'mongoose';
 class MensajesDao extends Container{
     constructor(){
         super('mensajes', new mongoose.Schema({
-        id: {type: Number, require: true},
         author:{
-            id: {type: Number, require: true},
+            id: {type: String, require: true},
             name: {type:String, require: true},
             lastName: {type:String, require: true},
             age: {type: Number, require: true},
@@ -16,6 +15,7 @@ class MensajesDao extends Container{
         text: {type:String, require: true},
     }))
     }
+
 }
 
 export default MensajesDao

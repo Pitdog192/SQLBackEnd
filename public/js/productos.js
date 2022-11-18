@@ -6,11 +6,11 @@ const getProductos = (url) => {
     .then(data => data.productos.map((producto) => {
         let card = document.createElement('div');
         let html = 
-            `<img class="card-img-top" src=${producto.foto} alt="Card image cap">
+            `<img class="card-img-top" src=${producto.pic} alt="Card image cap">
             <div class="card-body">
-                <h5 class="card-title">${producto.nombre}</h5>
-                <p class="card-text">${producto.descripcion}</p>
-                <p class="card-text">$${producto.precio}</p>
+                <h5 class="card-title">${producto.name}</h5>
+                <p class="card-text">${producto.descrtiption}</p>
+                <p class="card-text">$${producto.price}</p>
                 <a href="#" class="btn btn-primary">Agregar al carrito </a>
                 </div>
                 <div class="row">

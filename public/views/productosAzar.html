@@ -4,29 +4,36 @@
         <title>Productos Faker.js</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/productos.css" rel="stylesheet">
+        <link href="../css/productos.css" rel="stylesheet">
                 <!--BOOTSTRAP-->
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     </head>
     <body>
         <main>
             <section>
-                <table>
+                <h1>Tabla de productos aleatorios</h1>
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <td>Nombre</td>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Imagen</th>
                         </tr>
                     </thead>
                     <tbody id="tabla-productos">
-                        
+                        <!--Productos al azar-->
                     </tbody>
                 </table>
             </section>
+            <a href="../index.html" class="btn btn-warning">Inicio</a> 
         </main>
         <!--SCRIPT BOOTSTRAP-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         <!--NORMALIZR-->
+        <script> var exports = {}; </script><!--SOLUCIONA UN ERROR EN LA CONSOLA, LIBRERIA NORMALIZR-->
         <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.2/dist/normalizr.min.js"></script>
-        <script src="../js/normalizr.js"></script>
+        <script src="../js/productosFaker.js"></script>
     </body>
 </html>
