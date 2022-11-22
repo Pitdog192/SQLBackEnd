@@ -13,7 +13,10 @@ class MensajesDao extends Container{
             avatar: {type:String, require: true},
         },
         text: {type:String, require: true},
-    }))
+    }, 
+        {
+            versionKey: false
+        }))
     }
 
 }

@@ -1,8 +1,4 @@
 const socket = io.connect();
-socket.on('mensajes', mensaje => {
-    renderMensajes(mensaje);
-})
-
 function renderMensajes(mensajes){
     let html = mensajes.map((mensaje) => {
         return(
@@ -19,6 +15,31 @@ function renderMensajes(mensajes){
     }).join(" ");
     document.getElementById('mensajes').innerHTML = html;
 }
+
+function dosDecimales(n) {
+    let t=n.toString();
+    let regex=/(\d*.\d{0,2})/;
+    return t.match(regex)[0];
+}
+
+const porcentajeCompresion = (norm, desnorm) => {
+    let mensajesNormalizados = JSON.stringify(norm).length;
+    let mensajesDesnormalizados = JSON.stringify(desnorm).length;
+    const botonPorcentaje = document.getElementById('btn-compresion');
+    let porcentaje = (mensajesNormalizados * 100) / mensajesDesnormalizados;
+    botonPorcentaje.innerHTML = `Total de compresión de mensajes: ${dosDecimales(porcentaje)}%`;
+    return porcentaje
+}
+
+socket.on('mensajes', mensaje => {
+    const author = new normalizr.schema.Entity('author', {} ,{ idAttribute: 'id'});
+    const mensajeSchema = new normalizr.schema.Array({
+        author: author
+    });
+    const mensajeDesnormalize = normalizr.denormalize(mensaje.result, mensajeSchema, mensaje.entities);
+    porcentajeCompresion(mensaje.result, mensajeDesnormalize)
+    renderMensajes(mensajeDesnormalize);
+})
 
 const enviarMensaje = () => {
     let mensajeNuevo = {

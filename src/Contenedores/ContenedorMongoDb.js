@@ -24,7 +24,7 @@ class Container {
 	//Get all objects
 	async getAll() {
 		try {
-			return this.model.find();
+			return this.model.find().lean();
 		} catch (err) {
 			console.log(err);
 		}
