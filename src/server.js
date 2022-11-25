@@ -1,10 +1,13 @@
 import  express from 'express';
+import session from 'express-session';
 import routerProductos from './Router/routerProductos.js';
 import routerCarrito from './Router/routerCarrito.js';
 import { createRequire } from 'module';
 import config from './config.js';
 import mongoose from 'mongoose';
 import socketIo from './scripts/socket.js';
+import MongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
 
 const require = createRequire(import.meta.url);
 const { Server: IOServer} = require('socket.io');
@@ -12,9 +15,19 @@ const { Server: HttpServer}  = require('http');
 const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true}
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 app.use(express.static('public'));
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: config.mongodb.url, 
+        mongoOptions: advancedOptions
+    }),
+    secret: 'ecommerce',
+    resave: true,
+    saveUninitialized: true
+}))
 app.use('/productos', routerProductos); //RUTA DE PRODUCTOS
 app.use('/carrito', routerCarrito); // RUTA DE CARRITO
 
@@ -24,6 +37,25 @@ try {
 } catch (error) {
     console.log(error)
 } 
+
+//LOGIN ----------------------------
+app.post('/login', (req, res) => {
+    let nombreLogin = req.body.nombre;
+    req.session.nombre = nombreLogin;
+    res.json({nombreLogin: nombreLogin})
+})
+
+app.get('/logout', (req, res) => {
+    let nombreUser = req.session.nombre
+    req.session.destroy(err => {
+        if(!err){
+            res.json({resp: 'Logout Ok', user: nombreUser})
+        } else {
+            res.json({resp: 'Logout Error', error: err})
+        }
+    })
+})
+//FIN LOGIN-------------
 
 // SOCKETS-------------------------------
 socketIo(io);

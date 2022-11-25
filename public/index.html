@@ -14,6 +14,19 @@
     <body>
         <section class="secPrincipal container-fluid">
             <h1>Formulario para el ingreso de productos</h1>
+            <article class="row">
+                <form action="#" onsubmit="return submitLogin()" class="col-4" id="formLogin">
+                    <div class="form-group">
+                        <label for="nombreLogin"><b>Nombre:</b></label>
+                        <input type="text" class="form-control" id="nombreLogin" name="nombreLogin" placeholder="Ingrese nombre">
+                      </div>
+                      <button class="btn btn-primary">Submit</button>
+                </form>
+                <div id="cartelBien" class="hide">
+                    <p id="bienvenidaUsuario"></p>
+                    <form action="#" id="btnLogout" onsubmit="return logout()"><button class="btn btn-success">Logout</button></form>
+                </div>
+            </article>
             <div class="container">
                 <a class="btn btn-primary" href="views/productos.html">Productos</a>
                 <form action="#" method="POST" class="formulario" onsubmit="return enviarProducto()">

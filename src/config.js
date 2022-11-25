@@ -13,7 +13,7 @@ export default {
         useNullAsDefault: true
     },
     mongodb: {
-        url : 'mongodb+srv://Pitdog:qhXz8TPoJ0epg6v7@cluster0.xmoxfot.mongodb.net/?retryWrites=true&w=majority'
+        url : 'mongodb+srv://Pitdog:qhXz8TPoJ0epg6v7@cluster0.xmoxfot.mongodb.net/ecommerce?retryWrites=true&w=majority'
     },
     firebase: {
         apiKey: "AIzaSyCHF8LEiwMrvcmcV5WZ3jdiYzksoPzEl9g",
