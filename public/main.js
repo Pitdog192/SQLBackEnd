@@ -144,7 +144,6 @@ const logout = () => {
     fetch('http://localhost:8080/logout')
     .then(resp => resp.json())
     .then(data => {
-        console.log(data)
         bienvenida.innerHTML = `Hasta luego ${data.user}`
         hastaLuego()
     })

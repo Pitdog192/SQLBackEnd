@@ -22,7 +22,8 @@ app.use(express.static('public'));
 app.use(session({
     store: MongoStore.create({
         mongoUrl: config.mongodb.url, 
-        mongoOptions: advancedOptions
+        mongoOptions: advancedOptions,
+        ttl: 600
     }),
     secret: 'ecommerce',
     resave: true,
