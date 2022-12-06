@@ -8,20 +8,26 @@ import mongoose from 'mongoose';
 import socketIo from './scripts/socket.js';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
+import checkAuth from './Middlewares/sesionMiddle.js';
+import bCrypt from 'bcrypt'; 
 
 const require = createRequire(import.meta.url);
 const { Server: IOServer} = require('socket.io');
 const { Server: HttpServer}  = require('http');
 const app = express();
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true}
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 app.use(express.static('public'));
+app.use(cookieParser('ecommerce'))
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: config.mongodb.url, 
+        mongoUrl: config.mongodb.url,
+        collectionName: 'usuarios',
         mongoOptions: advancedOptions,
         ttl: 600
     }),
@@ -29,9 +35,14 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-app.use('/productos', routerProductos); //RUTA DE PRODUCTOS
-app.use('/carrito', routerCarrito); // RUTA DE CARRITO
+app.use(passport.initialize())
+app.use(passport.session())
+app.use('/productos', checkAuth, routerProductos); //RUTA DE PRODUCTOS
+app.use('/carrito', checkAuth, routerCarrito); // RUTA DE CARRITO
 
+//EJS
+app.set('views', './views/ejs')
+app.set('view engine', 'ejs');
 //CONECCION A MONGODBATLAS
 try {
     await mongoose.connect(config.mongodb.url);
@@ -39,24 +50,99 @@ try {
     console.log(error)
 } 
 
-//LOGIN ----------------------------
-app.post('/login', (req, res) => {
-    let nombreLogin = req.body.nombre;
-    req.session.nombre = nombreLogin;
-    res.json({nombreLogin: nombreLogin})
+//COMPROBACIÓN DE CONTRASEÑA
+const passValid = (user, password) => {
+    return bCrypt.compareSync(password, user.password)
+}
+
+//HASH CONTRASEÑA
+const passHash = (password) => {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null)
+}
+
+//LOCAL STRATEGY LOGIN
+passport.use('login',new LocalStrategy(function(username,password,done){
+    User.findOne({username}, (err, user) => {
+        if(err){
+            return done(err)
+        }
+        if(!user){
+            console.log(`El usuario: ${user} no existe`)
+            return done(null, false)
+        }
+        if(!passValid){
+            console.log('Contraseña invalida')
+            return done(null, false)
+        }
+        return done(null,user)
+    })
+}))
+
+//LOCAL STRATEGY SIGUP
+passport.use('signup', new LocalStrategy({passReqToCallback: true}, (req,username,password,done) => {
+    User.findOne({'username': username}, function(err,user){
+        if(err){
+            console.log(`Error en el registro: ${err}`)
+            return done(err)
+        }
+        if(user){
+            console.log(`El usuario ${user} ya existe`)
+            return done(null,false)
+        }
+        const newUser = {
+            username: username,
+            password: passHash(password),
+            email: req.body.email
+        }
+        user.Create(newUser, (err, userWithId) =>{
+            if(err){
+                console.log(`Error al guardar un usuario: ${err}`)
+                return done(err)
+            }
+            console.log(`Creación de usuario satisfactoria`)
+            return done(null, userWithId)
+        })
+    })
+}))
+
+//LOGIN ----------------------------------
+app.get('/login', (req,res) =>{
+    res.render('./login/login.ejs')
+})
+
+app.post('/login', passport.authenticate('login', {failureRedirect: '/errorlogin'}), (req, res) => {
+    res.redirect('/productos')
+})
+
+app.get('/errorlogin', (req, res) => {
+    res.render('./login/login-error.ejs')
 })
 
 app.get('/logout', (req, res) => {
-    let nombreUser = req.session.nombre
     req.session.destroy(err => {
         if(!err){
-            res.json({resp: 'Logout Ok', user: nombreUser})
+            setTimeout(() => {
+                res.redirect('/login')
+            }, 2000);
         } else {
             res.json({resp: 'Logout Error', error: err})
         }
     })
 })
-//FIN LOGIN-------------
+
+app.get('/register', (req, res) => {
+    res.render('./login/register.ejs')
+})
+
+app.post('/register', passport.authenticate('signup', {failureRedirect: '/errorregister'}), (req, res) => {
+    res.redirect('/login')
+})
+
+app.get('/errorregister', (req, res) => {
+    res.render('./login/register-error.ejs')
+})
+//FIN LOGIN--------------------------------
+
 
 // SOCKETS-------------------------------
 socketIo(io);

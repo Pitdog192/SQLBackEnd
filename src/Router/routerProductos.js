@@ -1,11 +1,9 @@
-import Contenedor from '../Contenedores/Contenedor.js';
 import sesionMiddleware from '../Middlewares/sesionMiddle.js';
 import {insertarProductos} from '../scripts/fakerProductos.js';
+import {productosDao} from '../daos/index.js';
 //NECESARIO PARA USAR REQUIRE EN ECS6
 import { createRequire } from 'module';
-import {productosDao} from '../daos/index.js';
 const require = createRequire(import.meta.url);
-
 const Router = require('router') ;
 const routerProductos = Router();
 
@@ -14,7 +12,9 @@ routerProductos.get('/:id?', async ( req, res )=>{ //devuelve un producto según
         res.json(await productosDao.getById(req.params.id))
     }
     else{
-        res.json(await productosDao.getAll())
+        let usuario = req.session.nombre
+        let productos = await productosDao.getAll()
+        res.render('productos.ejs', {productos, usuario})
     }
 })
 
@@ -35,7 +35,6 @@ routerProductos.delete('/:id',sesionMiddleware, async ( req, res ) => { // elimi
 routerProductos.get('/api/productos-test', (req, res) => {
     res.json(insertarProductos())
 })
-
 
 export default routerProductos;
 

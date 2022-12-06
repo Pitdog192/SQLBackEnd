@@ -1,10 +1,9 @@
-let admin = true;
-const sesionMiddleware = (req, res, next) => {
-    if(admin){
+const checkAuth = (req, res, next) => {
+    if(req.isAuthenticated()){
         next()
     } else {
-        res.json({respuesta: "no tiene permisos"})
+        res.redirect('/login')
     }
 }
 
-export default sesionMiddleware;
+export default checkAuth;

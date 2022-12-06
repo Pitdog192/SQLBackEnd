@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('../layouts/head') -%>
+    <title>Registro</title>
+</head>
+<body>
+    <section class="container-fluid text-center">
+        <h1>Registro de Usuario</h1>
+        <div class="row justify-content-center">
+            <form action="/register" method="POST" class="col-md-7 col-lg-5">
+                <div class="form-group">
+                    <label for="exampleInputEmail1"><b>Email</b></label>
+                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" placeholder="Ingrese su Email">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1"><b>Contraseña</b></label>
+                    <input type="password" class="form-control" name="passLogin" id="exampleInputPassword1" placeholder="Contraseña">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+                <a href="/login" class="btn btn-success">Login</a>
+            </div>
+        </form>
+    </section>
+</body>
+</html>

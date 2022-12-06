@@ -21,4 +21,15 @@
     margin-top: 10px;
 }
 
+#bienvenida{
+    background-color: rgb(1, 183, 255);
+    border-radius: 5px;
+}
 
+#despedida{
+    background-color: brown;
+}
+
+.esconder{
+    display: none;
+}
