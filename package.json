@@ -23,7 +23,7 @@
     "faker": "^5.5.3",
     "firebase-admin": "^11.2.0",
     "knex": "^2.3.0",
-    "mongoose": "^6.7.2",
+    "mongoose": "^6.8.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.20",
     "normalizr": "^3.6.2",
@@ -35,6 +35,9 @@
     "sqlite3": "^5.1.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0"
+    "@faker-js/faker": "^7.6.0",
+    "@types/bcrypt": "^5.0.0",
+    "@types/passport": "^1.0.11",
+    "@types/passport-local": "^1.0.34"
   }
 }

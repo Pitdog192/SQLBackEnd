@@ -9,13 +9,14 @@ import socketIo from './scripts/socket.js';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import checkAuth from './Middlewares/sesionMiddle.js';
-import bCrypt from 'bcrypt'; 
-
+import bCrypt from 'bcrypt';
+import passport from 'passport';
+import {usuariosDao} from './daos/index.js';
+mongoose.set('strictQuery', false);
 const require = createRequire(import.meta.url);
 const { Server: IOServer} = require('socket.io');
 const { Server: HttpServer}  = require('http');
 const app = express();
-const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
@@ -61,83 +62,65 @@ const passHash = (password) => {
 }
 
 //LOCAL STRATEGY LOGIN
-passport.use('login',new LocalStrategy(function(username,password,done){
-    User.findOne({username}, (err, user) => {
-        if(err){
-            return done(err)
-        }
-        if(!user){
-            console.log(`El usuario: ${user} no existe`)
-            return done(null, false)
-        }
-        if(!passValid){
-            console.log('Contraseña invalida')
-            return done(null, false)
-        }
-        return done(null,user)
-    })
+passport.use('login', new LocalStrategy(
+    (username,password,done) => {
+        usuariosDao.findOne({username}, (err, user) => {
+            if(err){
+                return done(err)
+            }
+            if(!user){
+                console.log(`El usuario: ${user} no existe`)
+                return done(null, false)
+            }
+            if(!passValid(password)){
+                console.log('Contraseña invalida')
+                return done(null, false)
+            }
+            return done(null,user)
+        })
 }))
 
 //LOCAL STRATEGY SIGUP
-passport.use('signup', new LocalStrategy({passReqToCallback: true}, (req,username,password,done) => {
-    User.findOne({'username': username}, function(err,user){
-        if(err){
-            console.log(`Error en el registro: ${err}`)
-            return done(err)
-        }
-        if(user){
-            console.log(`El usuario ${user} ya existe`)
+passport.use('signup', new LocalStrategy({passReqToCallback: true}, 
+    (req,username,password,done) => {
+        const usuario = usuariosDao.getUser(username);
+        if(usuario){
+            console.log(`El usuario ${usuario} ya existe`)
             return done(null,false)
         }
         const newUser = {
-            username: username,
-            password: passHash(password),
-            email: req.body.email
+            username: req.body.email,
+            password: passHash(password)
         }
-        user.Create(newUser, (err, userWithId) =>{
-            if(err){
-                console.log(`Error al guardar un usuario: ${err}`)
-                return done(err)
-            }
-            console.log(`Creación de usuario satisfactoria`)
-            return done(null, userWithId)
-        })
-    })
-}))
+        try{
+            usuariosDao.save(newUser)
+            return done(null, newUser)
+        } catch(err){
+            console.log(err)
+        }
+    }
+))
+
+passport.serializeUser(function(user,done){
+    done(null, user.username)
+})
+
+passport.deserializeUser(function(username,done){
+    const usuario = usuariosDao.getById(username)
+    done(null, usuario)
+})
+
 
 //LOGIN ----------------------------------
-app.get('/login', (req,res) =>{
-    res.render('./login/login.ejs')
-})
-
-app.post('/login', passport.authenticate('login', {failureRedirect: '/errorlogin'}), (req, res) => {
-    res.redirect('/productos')
-})
-
-app.get('/errorlogin', (req, res) => {
-    res.render('./login/login-error.ejs')
-})
-
+app.get('/login', (req,res) =>{res.render('./login/login.ejs')})
+app.post('/login', passport.authenticate('login', {failureRedirect: '/errorlogin', successRedirect: '/productos'}))
+app.get('/errorlogin', (req, res) => {res.render('./login/login-error.ejs')})
 app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if(!err){
-            setTimeout(() => {
-                res.redirect('/login')
-            }, 2000);
-        } else {
-            res.json({resp: 'Logout Error', error: err})
-        }
-    })
+    req.logout();
+    res.redirect('/');
 })
-
-app.get('/register', (req, res) => {
-    res.render('./login/register.ejs')
-})
-
-app.post('/register', passport.authenticate('signup', {failureRedirect: '/errorregister'}), (req, res) => {
-    res.redirect('/login')
-})
-
+app.get('/register', (req, res) => {res.render('./login/register.ejs')})
+app.post('/register', passport.authenticate('signup', {failureRedirect: '/errorregister', successRedirect: '/login'}))
 app.get('/errorregister', (req, res) => {
     res.render('./login/register-error.ejs')
 })
