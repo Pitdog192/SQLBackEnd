@@ -81,25 +81,37 @@ passport.use('login', new LocalStrategy(
 }))
 
 //LOCAL STRATEGY SIGUP
-passport.use('signup', new LocalStrategy({passReqToCallback: true}, 
-    (req,username,password,done) => {
-        const usuario = usuariosDao.getUser(username);
-        if(usuario){
-            console.log(`El usuario ${usuario} ya existe`)
-            return done(null,false)
-        }
-        const newUser = {
-            username: req.body.email,
-            password: passHash(password)
-        }
-        try{
-            usuariosDao.save(newUser)
-            return done(null, newUser)
-        } catch(err){
-            console.log(err)
-        }
-    }
-))
+passport.use('signup', new LocalStrategy({passReqToCallback: true, usernameField: 'email'}, 
+    (req, username, password, done) => {
+        usuariosDao.findOne({ 'username': username }, function (err, user) {
+            if (err) {
+                console.log('Error in SignUp: ' + err);
+                return done(err);
+            } 
+            if (user) {
+                console.log('User already exists');
+                return done(null, false)
+            } 
+            const newUser = {
+                username: username,
+                email: req.body.email,
+                password: createHash(password),
+            }
+            usuariosDao.create(newUser, (err, userWithId) => {
+                if (err) {
+                    console.log('Error in Saving user: ' + err);
+                    return done(err);
+                }
+                console.log(user)
+                console.log('User Registration succesful');
+                return done(null, userWithId);
+            });
+    });
+}))
+
+function createHash(password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
 
 passport.serializeUser(function(user,done){
     done(null, user.username)
