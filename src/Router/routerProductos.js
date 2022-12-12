@@ -12,7 +12,7 @@ routerProductos.get('/:id?', async ( req, res )=>{ //devuelve un producto según
         res.json(await productosDao.getById(req.params.id))
     }
     else{
-        let usuario = req.session.nombre
+        let usuario = req.session.passport.user;
         let productos = await productosDao.getAll()
         res.render('productos.ejs', {productos, usuario})
     }

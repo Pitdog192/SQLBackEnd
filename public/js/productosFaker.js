@@ -11,7 +11,7 @@ const getProductos = (url) => {
             <td>${prod.product.description}</td>
             <td>$${prod.product.price}</td>
             <td>${prod.product.stock}</td>
-            <td>${prod.product.pic}</td>
+            <td><img src="${prod.product.pic}"/></td>
         </tr>`;
         tabla.appendChild(fila)
     }))

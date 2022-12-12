@@ -8,11 +8,13 @@ const routerLogin = Router();
 const user = {};
 //LOGIN ----------------------------------
 routerLogin.get('/login', (req,res) =>{res.render('./login/login.ejs')})
-routerLogin.post('/login', passport.authenticate('login', {failureRedirect: '/errorlogin', successRedirect: '/'}))
+routerLogin.post('/login', passport.authenticate('login', {failureRedirect: '/errorlogin', successRedirect: '/productos'}))
 routerLogin.get('/errorlogin', (req, res) => {res.render('./login/login-error.ejs')})
 routerLogin.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
+    req.session.destroy();
+    setTimeout(() => {
+        res.redirect('/login')
+    }, 3000);;
 })
 routerLogin.get('/register', (req, res) => {res.render('./login/register.ejs')})
 routerLogin.post('/register', async (req, res) => {

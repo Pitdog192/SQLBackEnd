@@ -37,7 +37,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use('/productos', checkAuth, routerProductos); //RUTA DE PRODUCTOS
-app.use('/carrito', checkAuth, routerCarrito); // RUTA DE CARRITO
+app.use('/carrito', routerCarrito); // RUTA DE CARRITO
 app.use('/', routerLogin); //RUTA LOGIN
 
 //EJS
@@ -59,5 +59,5 @@ app.use('*', (req, res) => {
     let path = req.params;
     res.send({ Error_ruta: `La ruta: '${path[0]}' no está implementada` });
 });
-const server = httpServer.listen(config.port, () => console.log(`Server escuchando, http://localhost:${config.port}`));
+const server = httpServer.listen(config.port, () => console.log(`Server escuchando, http://localhost:${config.port}/login`));
 server.on('error', (error) => console.log(`Error: ${error}`));
