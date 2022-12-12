@@ -1,16 +1,19 @@
-import mongoose from 'mongoose';
-import Container from '../../Contenedores/ContenedorMongoDb.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const {model, Schema} = require('mongoose')
 
-class UsuariosDao extends Container {
-	constructor() {
-		super('usuarios',new mongoose.Schema(
-			{	
-				username: {type: String, require: true},
-				email: { type: String, require: true },
-				password: { type: String, require: true },
-			}
-		));
-	}
-}
+const UsuarioSchema = new Schema({
+    username: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    password: {
+        type: String,
+        trim: true,
+        required: true
+    }
+})
 
-export default UsuariosDao;
+
+export default model('Usuario', UsuarioSchema)
