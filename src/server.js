@@ -3,6 +3,7 @@ import session from 'express-session';
 import routerProductos from './Router/routerProductos.js';
 import routerCarrito from './Router/routerCarrito.js';
 import routerLogin from './Router/routerLogin.js';
+import routerProcess from './Router/routerProcess.js';
 import config from './config.js';
 import mongoose from 'mongoose';
 import socketIo from './scripts/socket.js';
@@ -11,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import checkAuth from './Middlewares/sesionMiddle.js';
 import passport from './scripts/passport.js';
 import { createRequire } from 'module';
+import routerRandom from './Router/routerRandom.js';
 const require = createRequire(import.meta.url);
 mongoose.set('strictQuery', false);
 const { Server: IOServer} = require('socket.io');
@@ -39,6 +41,8 @@ app.use(passport.session())
 app.use('/productos', checkAuth, routerProductos); //RUTA DE PRODUCTOS
 app.use('/carrito', routerCarrito); // RUTA DE CARRITO
 app.use('/', routerLogin); //RUTA LOGIN
+app.use('/info', routerProcess)// RUTA YARGS
+app.use('/api', routerRandom);//RUTA RANDOM CON FORKS
 
 //EJS
 app.set('views', './views/ejs')
