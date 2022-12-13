@@ -13,6 +13,7 @@ import checkAuth from './Middlewares/sesionMiddle.js';
 import passport from './scripts/passport.js';
 import { createRequire } from 'module';
 import routerRandom from './Router/routerRandom.js';
+import args from '../yargs.js';
 const require = createRequire(import.meta.url);
 mongoose.set('strictQuery', false);
 const { Server: IOServer} = require('socket.io');
@@ -43,7 +44,7 @@ app.use('/carrito', routerCarrito); // RUTA DE CARRITO
 app.use('/', routerLogin); //RUTA LOGIN
 app.use('/info', routerProcess)// RUTA YARGS
 app.use('/api', routerRandom);//RUTA RANDOM CON FORKS
-
+app.set('port', args.port);
 //EJS
 app.set('views', './views/ejs')
 app.set('view engine', 'ejs');
@@ -63,5 +64,7 @@ app.use('*', (req, res) => {
     let path = req.params;
     res.send({ Error_ruta: `La ruta: '${path[0]}' no está implementada` });
 });
-const server = httpServer.listen(config.port, () => console.log(`Server escuchando, http://localhost:${config.port}/login`));
+
+app.set('port', args.port);
+const server = httpServer.listen(app.get('port'), () => console.log(`Server escuchando, http://localhost:${app.get('port')}/login`));
 server.on('error', (error) => console.log(`Error: ${error}`));
