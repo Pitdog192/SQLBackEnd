@@ -6,12 +6,13 @@ const routerProcess = Router();
 
 routerProcess.get('/', (req, res) => {
     const data = {
-        'argumentos': args,
-        'plataforma': process.platform,
-        'version de Node': process.version,
-        'memoria': process.memoryUsage(),
-        'ruta de ejecucion': process.execPath,
-        'process ID': process.pid,
+        'Argumentos de Entrada': args,
+        'Nombre de la plataforma "Sistema Operativo"': process.platform,
+        'Versión de Node.js': process.version,
+        'Memoria total reservada "rss"': process.memoryUsage(),
+        'Path de ejecución': process.execPath,
+        'Process ID': process.pid,
+        'Carpeta del Proyecto': process.cwd()
     }
     return res.json(data)
 })
