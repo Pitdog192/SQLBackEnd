@@ -1,0 +1,9 @@
+nodemon ./src/server.js
+nodemon ./src/server.js -p 8080 -m fork
+nodemon ./src/server.js -p 8080 -m cluster
+forever start ./src/server.js -p 8080 -m fork
+forever start ./src/server.js -p 8080 -m cluster
+pm2 start ./src/server.js --name="Serverfork" --watch -- 8080
+pm2 start ./src/server.js --name="Servercluster" --watch -i max
+
+

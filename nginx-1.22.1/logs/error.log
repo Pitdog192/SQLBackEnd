@@ -1,0 +1,2 @@
+2022/12/21 15:23:08 [error] 7360#7552: *1 CreateFile() "C:\Users\arroquigarays\Desktop\nginx-1.22.1/html/favicon.ico" failed (2: El sistema no puede encontrar el archivo especificado), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2023/01/02 12:36:17 [emerg] 6100#476: invalid number of arguments in "root" directive in D:\Pendrive santiago\CursoBackEnd\entregable20\SQLBackEnd\nginx-1.22.1/conf/nginx.conf:52
